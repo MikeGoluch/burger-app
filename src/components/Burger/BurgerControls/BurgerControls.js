@@ -21,7 +21,9 @@ const burgerControls = (props) => {
                     deducted={() => props.deductIngredient(ing.type)}
                     disabledLessBtn={props.disableLessBtn[ing.type] === 0 ? true : false}/>
             ))}
-            <button disabled={!props.disableOrderBtn}>ORDER</button>
+            <button 
+                disabled={!props.disableOrderBtn}
+                onClick={props.makeOrder}>ORDER</button>
         </div>
     )
 };

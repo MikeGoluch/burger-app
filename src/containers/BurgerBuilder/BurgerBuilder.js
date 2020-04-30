@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Auxillary from '../../hoc/Auxillary';
 import Burger from '../../components/Burger/Burger';
 import BurgerControls from '../../components/Burger/BurgerControls/BurgerControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from'../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
     cheese: 0.2,
@@ -19,7 +21,8 @@ class BurgerBuilder extends Component {
             bacon: 0
         },
         totalPrice: 0,
-        isOrderAvailable: false
+        isOrderAvailable: false,
+        isOrderClicked: false,
     }
 
     addIngredientHandler = (type) => {
@@ -33,7 +36,7 @@ class BurgerBuilder extends Component {
             ingredients: newIng,
             totalPrice: newPrice
         });
-        this.disableOrderBtn(newIng);
+        this.disableOrderBtnHandler(newIng);
     }
 
     deductIngredientHandler = (type) => {
@@ -50,10 +53,10 @@ class BurgerBuilder extends Component {
             ingredients: newIng,
             totalPrice: newPrice
         });
-        this.disableOrderBtn(newIng);
+        this.disableOrderBtnHandler(newIng);
     }
 
-    disableOrderBtn = (ingredients) => {
+    disableOrderBtnHandler = (ingredients) => {
         console.log(this.state.isOrderAvailable)
         const ingredientsVal = Object.values(ingredients);
         const sum = ingredientsVal.reduce((acc, cur) => {
@@ -64,9 +67,26 @@ class BurgerBuilder extends Component {
         })
     }
 
+    makeOrderHandler = () => {
+        this.setState({
+            isOrderClicked: true
+        })
+    }
+
+    cancelOrderHandler = () => {
+        this.setState({
+            isOrderClicked: false
+        })
+    }
+
     render() {
         return (
             <Auxillary>
+                <Modal 
+                    makeOrder={this.state.isOrderClicked}
+                    cancelOrder={this.cancelOrderHandler}>
+                    <OrderSummary ingredientsSummary={this.state.ingredients} />
+                </Modal>
                 <div>
                     <Burger ingredients={this.state.ingredients}/>
                 </div>
@@ -76,7 +96,8 @@ class BurgerBuilder extends Component {
                         deductIngredient={this.deductIngredientHandler}
                         disableLessBtn={this.state.ingredients}
                         disableOrderBtn={this.state.isOrderAvailable}
-                        burgerPrice={this.state.totalPrice}/>
+                        burgerPrice={this.state.totalPrice}
+                        makeOrder={this.makeOrderHandler}/>
                 </div>
             </Auxillary>
         )
