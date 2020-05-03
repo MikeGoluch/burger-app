@@ -1,9 +1,40 @@
 .Toolbar {
     width: 100%;
-    height: 56px;
-    background-color: seagreen;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    height: auto;
+    background-color: #247ba0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.Navigation {
+    align-self: center;
+    justify-self: end;
+    margin-right: 10px;
+}
+
+.Logo {
+    justify-self: start;
+    margin: 10px 0;
+}
+
+.MenuToggle {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .Toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+    .Navigation {
+        display: none;
+    }
+    .MenuToggle {
+        display: block;
+    }
+    .Logo {
+        justify-self: end;
+    }
 }

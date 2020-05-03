@@ -12,7 +12,7 @@ const buttons = [
 const burgerControls = (props) => {
     return (
         <div className={classes.BurgerControls}>
-            <p>Current price: {props.burgerPrice.toFixed(2)}</p>
+            <p>Current price: <strong>{props.burgerPrice.toFixed(2)}</strong></p>
             {buttons.map(ing => (
                 <BurgerControl 
                     key={ing.label} 
@@ -23,7 +23,8 @@ const burgerControls = (props) => {
             ))}
             <button 
                 disabled={!props.disableOrderBtn}
-                onClick={props.makeOrder}>ORDER</button>
+                onClick={props.makeOrder}
+                className={classes.OrderBtn}>ORDER</button>
         </div>
     )
 };

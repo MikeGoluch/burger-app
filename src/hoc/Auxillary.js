@@ -1,3 +1,9 @@
-const auxillary = (props) => props.children;
+import React from 'react';
 
-export default auxillary
+const auxillary = (props) => (
+    <div className={props.styles}>
+        {props.children}
+    </div>
+);
+
+export default auxillary;

@@ -1,3 +1,20 @@
 .NavigationItem {
+    height: 100%;
+    display: inline-block;
+}
+
+.NavigationItem a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    display: block;
+    height: 100%;
     padding: 5px 20px;
+
+}
+
+.NavigationItem:hover a {
+    background-color: #ffffff;
+    color: #000000;
+
 }
