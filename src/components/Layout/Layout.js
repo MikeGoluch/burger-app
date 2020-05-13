@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import classes from './Layout.module.css';
 import Toolbar from '../Navigation/Toolbar/Toolbar';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
-import Auxillary from '../../hoc/Auxillary';
+import Auxillary from '../../hoc/Auxillary/Auxillary';
 
 
 class Layout extends Component {
     state = {
         isSideDrawerOpened: true
+    }
+
+    componentDidMount() {
+        console.log('[Layout] ComponentDidMount')
     }
 
     sideDrawerHandler = () => {
