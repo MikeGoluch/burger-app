@@ -5,7 +5,7 @@ import classes from './Burger.module.css';
 const burger = (props) => {
     let convertedIngredients = Object.keys(props.ingredients).map(ingredient => {
         return [...Array(props.ingredients[ingredient])].map((amount, index) => {
-            return <BurgerIngredient key={ingredient + index} type={ingredient}/>
+            return <BurgerIngredient key={ingredient + index} type={ingredient} />
         })
     });
     const reducedIngredientsArray = convertedIngredients.reduce((acc, cur) => {
@@ -18,9 +18,9 @@ const burger = (props) => {
     console.log(reducedIngredientsArray)
     return (
         <div className={classes.Burger}>
-            <BurgerIngredient type='bread-top'/>
+            <BurgerIngredient type='bread-top' />
             {convertedIngredients}
-            <BurgerIngredient type='bread-bottom'/>
+            <BurgerIngredient type='bread-bottom' />
         </div>
     )
 }

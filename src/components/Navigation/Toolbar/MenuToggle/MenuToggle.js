@@ -2,8 +2,8 @@ import React from 'react';
 import classes from './MenuToggle.module.css';
 
 const menuToggle = (props) => (
-    <div 
-        className={classes.MenuToggle} 
+    <div
+        className={classes.MenuToggle}
         onClick={props.clicked}>
         <div></div>
         <div></div>

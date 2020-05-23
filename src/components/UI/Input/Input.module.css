@@ -1,0 +1,13 @@
+.Input {
+    /* background-color: #247ba0; */
+    width: 70%;
+    margin: 10px auto;
+}
+
+.InputElement {
+    width: 100%;
+}
+
+.HasError {
+    border-color: red;
+}

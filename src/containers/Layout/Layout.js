@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classes from './Layout.module.css';
-import Toolbar from '../Navigation/Toolbar/Toolbar';
-import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
+import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 import Auxillary from '../../hoc/Auxillary/Auxillary';
 
 
@@ -22,7 +22,7 @@ class Layout extends Component {
 
     toggleMenuHandler = () => {
         this.setState((prevState) => {
-            return {isSideDrawerOpened: !prevState.isSideDrawerOpened};
+            return { isSideDrawerOpened: !prevState.isSideDrawerOpened };
         })
     }
 
@@ -30,10 +30,10 @@ class Layout extends Component {
         return (
             <Auxillary>
                 <div>
-                    <Toolbar toggleMenu={this.toggleMenuHandler}/>
-                    <SideDrawer 
+                    <Toolbar toggleMenu={this.toggleMenuHandler} />
+                    <SideDrawer
                         open={this.state.isSideDrawerOpened}
-                        close={this.sideDrawerHandler}/>
+                        close={this.sideDrawerHandler} />
                 </div>
                 <main className={classes.Container}>
                     {this.props.children}

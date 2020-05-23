@@ -14,9 +14,9 @@ const sideDrawer = (props) => {
     return (
         <Auxillary>
             <div className={classes.Backdrop}>
-                <Backdrop 
+                <Backdrop
                     display={props.open}
-                    orderCanceled={props.close}/>
+                    orderCanceled={props.close} />
             </div>
             <div className={addedClass.join(' ')}>
                 <div className={classes.Logo}>

@@ -1,0 +1,14 @@
+.ContactData {
+    text-align: center;
+}
+
+.ContactData input,
+.ContactData select {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #000000;
+}
+
+.Test {
+    color: red;
+}

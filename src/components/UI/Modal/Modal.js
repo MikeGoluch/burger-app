@@ -12,10 +12,10 @@ class Modal extends Component {
     render() {
         return (
             <Auxillary>
-                <Backdrop 
+                <Backdrop
                     orderCanceled={this.props.cancelOrder}
-                    modalDisplayed={this.props.displayModal}/>
-                <div 
+                    modalDisplayed={this.props.displayModal} />
+                <div
                     className={classes.Modal}
                     style={{
                         transform: this.props.displayModal ? 'translateY(0)' : 'translateY(-100vh)',

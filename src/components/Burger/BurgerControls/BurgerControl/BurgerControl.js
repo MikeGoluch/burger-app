@@ -5,12 +5,12 @@ const burgerControl = (props) => {
     return (
         <div className={classes.BuildControl}>
             <p className={classes.Label}>{props.label}</p>
-            <button 
-                className={classes.Less} 
-                onClick={props.deducted} 
+            <button
+                className={classes.Less}
+                onClick={props.deducted}
                 disabled={props.disabledLessBtn}>Less</button>
-            <button 
-                className={classes.More} 
+            <button
+                className={classes.More}
                 onClick={props.added}>More</button>
         </div>
     )

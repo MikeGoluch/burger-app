@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from '../../axios-config';
 import Auxillary from '../Auxillary/Auxillary';
 import Modal from '../../components/UI/Modal/Modal';
 
@@ -22,7 +21,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 });
             });
         }
-        
+
         componentWillUnmount() {
             console.log('[withErrorHandler] componentWillUnmount', this.requestInterceptor, this.responseInterceptor)
             axios.interceptors.request.eject(this.requestInterceptor);
