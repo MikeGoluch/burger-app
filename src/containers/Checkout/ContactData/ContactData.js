@@ -5,16 +5,18 @@ import axios from '../../../axios-config';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import FormErrors from './FormErrors/FormErrors';
-// import rdfc from 'rdfc';
+import { connect } from 'react-redux';
+import * as actionCreator from '../../../store/actions/index';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 const rfdc = require('rfdc')();
 
 
 
 class ContactData extends Component {
-    inputConfig = (elementType, elementConfig) => {
+    inputConfig = (elementType, elementConfig, val) => {
         const elType = elementType;
         const elConfig = { ...elementConfig };
-        const value = ''
+        const value = val === 'undefined' ? '' : val;
         return (
             { elType, elConfig, value }
         );
@@ -27,22 +29,17 @@ class ContactData extends Component {
             street: this.inputConfig('input', { placeholder: 'Street', type: 'text' }),
             zipCode: this.inputConfig('input', { placeholder: 'Your ZIP', type: 'text' }),
             phoneNumber: this.inputConfig('input', { placeholder: 'Your phone number', type: 'number' }),
-            paymentMethod: this.inputConfig('select', { options: ['cash', 'credit card'] })
+            paymentMethod: this.inputConfig('select', { options: ['cash', 'credit card'] }, 'cash')
         },
         formErrors: { name: '', lastName: '', email: '', street: '', zipCode: '', phoneNumber: '' },
         elementValidity: { name: false, lastName: false, email: false, street: false, zipCode: false, phoneNumber: false },
         formValid: true,
-        sendOrderLoading: false
     }
 
 
     validateField = (fieldName, value) => {
         let fieldValidationErrors = { ...this.state.formErrors };
-        // let emailValid = this.state.emailValid;
-        // let passwordValid = this.state.passwordValid;
         let elementValidation = this.state.elementValidity;
-        console.log('fieldname', fieldName);
-        console.log('value', value);
         switch (fieldName) {
             case 'name':
                 elementValidation.name = value.length >= 3;
@@ -95,11 +92,8 @@ class ContactData extends Component {
         const booleanVal = [];
         for (let key in this.state.elementValidity) {
             booleanVal.push(this.state.elementValidity[key])
-            console.log(booleanVal)
         }
-        console.log('bv', booleanVal)
         const isValid = booleanVal.indexOf(false) === -1 ? false : true;
-        console.log(isValid)
         this.setState({ formValid: isValid });
     }
 
@@ -109,36 +103,28 @@ class ContactData extends Component {
         for (let inputElement in this.state.customer) {
             formInputData[inputElement] = this.state.customer[inputElement].value;
         }
-        console.log('fid', formInputData)
         this.setState({
             sendOrderLoading: true
         })
         const order = {
             customer: formInputData,
-            ingredients: {
-                cheese: this.props.ingredients.cheese,
-                meat: this.props.ingredients.meat,
-                salad: this.props.ingredients.salad,
-                bacon: this.props.ingredients.bacon
-            },
-            totalPrice: this.props.totalPrice
+            ingredients: this.props.ings,
+            totalPrice: this.props.price
         }
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({ sendOrderLoading: false });
-                this.props.history.push('/burger-builder')
-            })
-            .catch(error => this.setState({
-                sendOrderLoading: false,
-            }));
+        this.props.onSendRequest(order);
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         this.setState({ sendOrderLoading: false });
+        //         this.props.history.push('/burger-builder')
+        //     })
+        //     .catch(error => this.setState({
+        //         sendOrderLoading: false,
+        //     }));
     }
 
     inputChangedHandler = (event, inputElement) => {
-        // console.log('val', event.target.value);
-        // console.log('name', event.target.name);
         const clonedArray = rfdc(this.state.customer);
-        // console.log(clonedArray)
         clonedArray[inputElement].value = event.target.value;
         this.setState(
             { customer: clonedArray },
@@ -149,8 +135,6 @@ class ContactData extends Component {
     render() {
         const arr = [];
         for (let input in this.state.customer) {
-            // console.log('input', input)
-            // console.log('inpuValue', this.state.customer[input])
             arr.push({ config: this.state.customer[input], key: input })
         }
         const inputs = arr.map((cur, index) => (
@@ -174,13 +158,30 @@ class ContactData extends Component {
                 </form>
             </div>
         );
+        if (this.props.loading) {
+            form = <Spinner />;
+        }
         return (
             <div className={classes.ContactData}>
                 <h4>Enter Your contact data</h4>
-                {this.state.sendOrderLoading ? <Spinner /> : form}
+                {this.props.loading ? <Spinner /> : form}
             </div>
         )
     }
 };
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.ing.ingredients,
+        price: state.ing.totalPrice,
+        loading: state.order.sendOrderLoading
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSendRequest: (orderData) => dispatch(actionCreator.sendOrderRequest(orderData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
