@@ -1,8 +1,12 @@
 .Burger {
     width: 60%;
-    height: 250px;
-    margin: auto;
+    height: 300px;
+    margin: 20px auto;
+    padding: 5px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 @media (min-width: 640px){

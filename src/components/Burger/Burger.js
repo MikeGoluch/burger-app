@@ -13,9 +13,9 @@ const burger = (props) => {
     }, []);
 
     if (reducedIngredientsArray.length === 0) {
-        convertedIngredients = <p>Start adding the ingredients</p>
+        convertedIngredients = <p><strong>CREATE YOUR BURGER</strong></p>
     }
-    console.log(reducedIngredientsArray)
+    // console.log(reducedIngredientsArray)
     return (
         <div className={classes.Burger}>
             <BurgerIngredient type='bread-top' />

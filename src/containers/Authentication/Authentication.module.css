@@ -1,25 +1,13 @@
-.BurgerControls {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    width: 40%;
-    margin: 20px auto 50px;
-    padding: 10px 0;
-    border: 10px solid #247ba0;
-    border-radius: 20px;
-    border-style: double;
-    background-color: darkgoldenrod;
-}
-
 .OrderBtn {
     width: 100px;
     border: 2px solid #000000;
     background-color: #ff1654;
     padding: 5px;
     border-radius: 18px;
-    margin-top: 15px;
+    margin-top: 15px auto;
     color: #ffffff;
     font: inherit;
+    display: block;
 }
 
 .OrderBtn:focus {

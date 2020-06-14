@@ -13,76 +13,78 @@ const rfdc = require('rfdc')();
 
 
 class ContactData extends Component {
-    inputConfig = (elementType, elementConfig, val) => {
-        const elType = elementType;
-        const elConfig = { ...elementConfig };
-        const value = val === 'undefined' ? '' : val;
+    inputConfig = (labelName, elementType, elementConfig, val) => {
         return (
-            { elType, elConfig, value }
+            {
+                label: labelName,
+                elType: elementType,
+                elConfig: { ...elementConfig },
+                value: val === 'undefined' ? '' : val,
+                touched: false,
+                formErrors: '',
+                elementValidity: false
+            }
         );
     }
     state = {
         customer: {
-            name: this.inputConfig('input', { placeholder: 'Your Name', type: 'text' }),
-            lastName: this.inputConfig('input', { placeholder: 'Your Lastname', type: 'text' }),
-            email: this.inputConfig('input', { placeholder: 'Your Email', type: 'email' }),
-            street: this.inputConfig('input', { placeholder: 'Street', type: 'text' }),
-            zipCode: this.inputConfig('input', { placeholder: 'Your ZIP', type: 'text' }),
-            phoneNumber: this.inputConfig('input', { placeholder: 'Your phone number', type: 'number' }),
-            paymentMethod: this.inputConfig('select', { options: ['cash', 'credit card'] }, 'cash')
+            name: this.inputConfig('Name', 'input', { placeholder: 'Your Name', type: 'text' }),
+            lastName: this.inputConfig('Last name', 'input', { placeholder: 'Your Lastname', type: 'text' }),
+            email: this.inputConfig('E-mail', 'input', { placeholder: 'Your Email', type: 'email' }),
+            street: this.inputConfig('Street', 'input', { placeholder: 'Street', type: 'text' }),
+            zipCode: this.inputConfig('Zip code', 'input', { placeholder: 'Your ZIP', type: 'text' }),
+            phoneNumber: this.inputConfig('Phone number', 'input', { placeholder: 'Your phone number', type: 'number' }),
+            paymentMethod: this.inputConfig('Payment method', 'select', { options: ['cash', 'credit card'] }, 'cash')
         },
-        formErrors: { name: '', lastName: '', email: '', street: '', zipCode: '', phoneNumber: '' },
-        elementValidity: { name: false, lastName: false, email: false, street: false, zipCode: false, phoneNumber: false },
         formValid: true,
     }
 
 
-    validateField = (fieldName, value) => {
-        let fieldValidationErrors = { ...this.state.formErrors };
-        let elementValidation = this.state.elementValidity;
+    validateInputField = (fieldName, value) => {
+        const clonedCustomerArr = rfdc(this.state.customer);
         switch (fieldName) {
             case 'name':
-                elementValidation.name = value.length >= 3;
-                fieldValidationErrors.name = elementValidation.name ? '' : ' is too short';
+                clonedCustomerArr[fieldName].elementValidity = value.length >= 3;
+                clonedCustomerArr[fieldName].formErrors = clonedCustomerArr[fieldName].elementValidity ? '' : ' is too short';
                 break;
             case 'lastName':
-                elementValidation.lastName = value.length >= 2;
-                fieldValidationErrors.lastName = elementValidation.lastName ? '' : ' is too short';
+                clonedCustomerArr[fieldName].elementValidity = value.length >= 2;
+                clonedCustomerArr[fieldName].formErrors = clonedCustomerArr[fieldName].elementValidity ? '' : ' is too short';
                 break;
             case 'email':
-                elementValidation.email = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = elementValidation.email ? '' : ' is invalid';
+                const regex = RegExp(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                clonedCustomerArr[fieldName].elementValidity = regex.test(value);
+                clonedCustomerArr[fieldName].formErrors = clonedCustomerArr[fieldName].elementValidity ? '' : ' is invalid';
                 break;
             case 'street':
-                elementValidation.street = value.length >= 4;
-                fieldValidationErrors.street = elementValidation.street ? '' : ' is too short';
+                clonedCustomerArr[fieldName].elementValidity = value.length >= 4;
+                clonedCustomerArr[fieldName].formErrors = clonedCustomerArr[fieldName].elementValidity ? '' : ' is too short';
                 break;
             case 'zipCode':
                 if (value.length < 5) {
-                    fieldValidationErrors.zipCode = ' is too short';
+                    clonedCustomerArr[fieldName].formErrors = ' is too short';
                 } else if (value.length > 5) {
-                    fieldValidationErrors.zipCode = ' is too long';
+                    clonedCustomerArr[fieldName].formErrors = ' is too long';
                 } else {
-                    fieldValidationErrors.zipCode = '';
-                    elementValidation.zipCode = true;
+                    clonedCustomerArr[fieldName].formErrors = '';
+                    clonedCustomerArr[fieldName].elementValidity = true;
                 }
                 break;
             case 'phoneNumber':
                 if (value.length < 9) {
-                    fieldValidationErrors.phoneNumber = ' is too short';
+                    clonedCustomerArr[fieldName].formErrors = ' is too short';
                 } else if (value.length > 9) {
-                    fieldValidationErrors.phoneNumber = ' is too long';
+                    clonedCustomerArr[fieldName].formErrors = ' is too long';
                 } else {
-                    fieldValidationErrors.phoneNumber = '';
-                    elementValidation.phoneNumber = true;
+                    clonedCustomerArr[fieldName].formErrors = '';
+                    clonedCustomerArr[fieldName].elementValidity = true;
                 }
                 break;
             default:
                 break;
         }
         this.setState({
-            formErrors: fieldValidationErrors,
-            elementValidity: elementValidation
+            customer: clonedCustomerArr
         }, this.validateForm);
     }
 
@@ -90,10 +92,11 @@ class ContactData extends Component {
 
     validateForm = () => {
         const booleanVal = [];
-        for (let key in this.state.elementValidity) {
-            booleanVal.push(this.state.elementValidity[key])
+        for (let key in this.state.customer) {
+            booleanVal.push(this.state.customer[key].elementValidity)
         }
-        const isValid = booleanVal.indexOf(false) === -1 ? false : true;
+        console.log(booleanVal)
+        const isValid = booleanVal.splice(0, booleanVal.length - 1).indexOf(false) === -1 ? false : true;
         this.setState({ formValid: isValid });
     }
 
@@ -126,35 +129,40 @@ class ContactData extends Component {
     inputChangedHandler = (event, inputElement) => {
         const clonedArray = rfdc(this.state.customer);
         clonedArray[inputElement].value = event.target.value;
+        clonedArray[inputElement].touched = true;
         this.setState(
             { customer: clonedArray },
-            () => { this.validateField(inputElement, clonedArray[inputElement].value) }
+            () => { this.validateInputField(inputElement, clonedArray[inputElement].value) }
         );
     }
 
     render() {
         const arr = [];
-        for (let input in this.state.customer) {
-            arr.push({ config: this.state.customer[input], key: input })
+        const updatedCustomerObject = rfdc(this.state.customer);
+        for (let input in updatedCustomerObject) {
+            arr.push({ config: updatedCustomerObject[input], key: input })
         }
-        const inputs = arr.map((cur, index) => (
+        const inputs = arr.map((input, index) => (
             <Input
                 key={index}
-                elementtype={cur.config.elType}
-                elementconfig={cur.config.elConfig}
-                value={cur.config.value}
-                changed={(event) => this.inputChangedHandler(event, cur.key)} />
+                elementtype={input.config.elType}
+                elementconfig={input.config.elConfig}
+                value={input.config.value}
+                isValid={input.config.elementValidity}
+                startInput={input.config.touched}
+                label={input.config.label}
+                error={input.config.formErrors}
+                changed={(event) => this.inputChangedHandler(event, input.key)} />
         ))
 
         let form = (
-            <div>
+            <div className={classes.Form}>
                 <form>
                     {inputs}
-                    <FormErrors formErrors={this.state.formErrors} />
-                    <Button
-                        btnType="Success"
-                        clicked={this.completeOrderHandler}
-                        disabled={this.state.formValid}>ORDER</Button>
+                    <button
+                        disabled={this.state.formValid}
+                        clicked={(event) => this.completeOrderHandler(event)}
+                        className={classes.OrderBtn}>ORDER</button>
                 </form>
             </div>
         );
@@ -163,7 +171,7 @@ class ContactData extends Component {
         }
         return (
             <div className={classes.ContactData}>
-                <h4>Enter Your contact data</h4>
+                <h4>ENTER YOUR CONTACT DATA</h4>
                 {this.props.loading ? <Spinner /> : form}
             </div>
         )

@@ -1,13 +1,18 @@
 .Button {
     background-color: transparent;
     border: none;
-    color: white;
+    color: #247ba0;
     outline: none;
     cursor: pointer;
     font: inherit;
     padding: 10px;
     margin: 10px;
     font-weight: bold;
+    font-size: 2rem;
+}
+
+.Button i[class*='fa-']:hover {
+    color: #70c1b3;
 }
 
 /* .Button:first-of-type {
@@ -15,10 +20,10 @@
     padding-left: 0;
 } */
 
-.Success {
+/* .Success {
     color: seagreen;
 }
 
 .Danger {
     color: #e63946;
-}
+} */

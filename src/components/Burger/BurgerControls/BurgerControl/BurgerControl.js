@@ -8,10 +8,10 @@ const burgerControl = (props) => {
             <button
                 className={classes.Less}
                 onClick={props.deducted}
-                disabled={props.disabledLessBtn}>Less</button>
+                disabled={props.disabledLessBtn}>LESS</button>
             <button
                 className={classes.More}
-                onClick={props.added}>More</button>
+                onClick={props.added}>MORE</button>
         </div>
     )
 };

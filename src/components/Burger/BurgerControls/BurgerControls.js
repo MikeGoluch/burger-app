@@ -12,14 +12,14 @@ const buttons = [
 const burgerControls = (props) => {
     return (
         <div className={classes.BurgerControls}>
-            <p>Current price: <strong>{props.burgerPrice.toFixed(2)}</strong></p>
-            {buttons.map(ing => (
+            <p>CURRENT PRICE: <strong>{props.burgerPrice.toFixed(2)}</strong></p>
+            {buttons.map(ingredient => (
                 <BurgerControl
-                    key={ing.label}
-                    label={ing.label}
-                    added={() => props.addIngredient(ing.type)}
-                    deducted={() => props.deductIngredient(ing.type)}
-                    disabledLessBtn={props.disableLessBtn[ing.type] === 0 ? true : false} />
+                    key={ingredient.label}
+                    label={ingredient.label.toUpperCase()}
+                    added={() => props.addIngredient(ingredient.type)}
+                    deducted={() => props.deductIngredient(ingredient.type)}
+                    disabledLessBtn={props.disableLessBtn[ingredient.type] === 0 ? true : false} />
             ))}
             <button
                 disabled={!props.disableOrderBtn}
